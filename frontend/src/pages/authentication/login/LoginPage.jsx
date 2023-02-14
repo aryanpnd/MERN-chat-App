@@ -11,14 +11,91 @@ import {
     Input,
     Stack,
     Text,
+    InputGroup,
+    InputRightElement
 
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { Logo } from './Logo'
 import { OAuthButtonGroup } from './OAuthButtonGroup'
 import { PasswordField } from './PasswordField'
+import { useToast } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useState } from 'react'
 
 export const LoginPage = () => {
+    const navigate = useNavigate()
+    const toast = useToast()
+
+    const [email, setEmail] = useState()
+    const [password, setPassword] = useState()
+    const [loading, setLoading] = useState(false)
+
+    const [show, setShow] = useState(false)
+    const handleClick = () => setShow(!show)
+
+    const notEmplemented = ()=>{
+        toast({
+            title: 'Warnig!!',
+            description: "This feature has not been implemented yet",
+            status: 'warning',
+            duration: 5000,
+            isClosable: true,
+            position: 'top-right',
+        })
+    }
+
+    const submitHandler = async () => {
+        setLoading(true);
+        if (!email || !password) {
+            toast({
+                title: 'Warnig!!',
+                description: "Please fill all the fields !",
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            })
+            setLoading(false);
+            return;
+        }
+        
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+            const { data } = await axios.post("/api/user/login", {email, password }, config)
+            toast({
+                title: 'Success',
+                description: "Login SuccessFull !!",
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            })
+            if (document.getElementById("checkBox").checked) {
+                localStorage.setItem("userInfo", JSON.stringify(data))
+            }
+            setLoading(false)
+            navigate('/')
+        } catch (error) {
+            toast({
+                title: 'Oops!!',
+                description: "Invalid Email and Password !!!",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            })
+            setLoading(false)
+        }
+
+    }
+
+
     return (
         <Container
             py={{
@@ -77,19 +154,37 @@ export const LoginPage = () => {
                         <Stack spacing="5" >
                             <FormControl d="flex">
                                 <FormLabel htmlFor="email">Email</FormLabel>
-                                <Input id="email" type="email" />
+                                <Input onChange={(e) => { setEmail(e.target.value) }} id="email" type="email" />
                             </FormControl>
-                            <PasswordField />
+
+                            <FormControl d="flex">
+                                <FormLabel htmlFor="email">Password</FormLabel>
+                                <InputGroup size='md'>
+                                    <Input
+                                        onChange={(e) => { setPassword(e.target.value) }}
+                                        pr='4.5rem'
+                                        type={show ? 'text' : 'password'}
+                                        placeholder='Enter password'
+                                    />
+                                    <InputRightElement width='4.5rem'>
+                                        <Button h='1.75rem' size='sm' onClick={handleClick}>
+                                            {show ? 'Hide' : 'Show'}
+                                        </Button>
+                                    </InputRightElement>
+                                </InputGroup>
+                            </FormControl>
+
+                            {/* <PasswordField /> */}
                         </Stack>
                         <HStack justify="space-between">
-                            <Checkbox defaultChecked>Remember me</Checkbox>
+                            <Checkbox id='checkBox' defaultChecked>Remember me</Checkbox>
                             <Button variant="link" colorScheme="blue" size="sm">
                                 Forgot password?
                             </Button>
                         </HStack>
                         <Stack spacing="6">
-                            <Button  colorScheme='teal'>Sign in</Button>
-                            <Button colorScheme='blue'>Get Guest User Token</Button>
+                            <Button isLoading={loading}  onClick={submitHandler} colorScheme='teal'>Sign in</Button>
+                            <Button onClick={notEmplemented} colorScheme='blue'>Get Guest User Token</Button>
                             <HStack>
                                 <Divider /> 
                                 <Text fontSize="sm" whiteSpace="nowrap" color="muted">
@@ -98,7 +193,7 @@ export const LoginPage = () => {
                                 <Divider />
                             </HStack>
 
-                            <OAuthButtonGroup />
+                            <OAuthButtonGroup notEmplemented={notEmplemented}/>
                         </Stack>
                         <HStack spacing="1" justify="center">
                             <Text color="muted">Don't have an account?</Text>

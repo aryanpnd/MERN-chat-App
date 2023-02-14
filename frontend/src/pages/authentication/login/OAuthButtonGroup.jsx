@@ -15,10 +15,10 @@ const providers = [
 //   },
 ]
 
-export const OAuthButtonGroup = () => (
+export const OAuthButtonGroup = (props) => (
   <ButtonGroup variant="outline" spacing="4" width="full">
     {providers.map(({ name, icon }) => (
-      <Button key={name} width="full">
+      <Button onClick={props.notEmplemented} key={name} width="full">
         <VisuallyHidden>Sign in with {name}</VisuallyHidden>
         {icon}
       </Button>

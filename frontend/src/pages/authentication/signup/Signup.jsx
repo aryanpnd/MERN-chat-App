@@ -21,76 +21,124 @@ import { Logo } from './Logo'
 import { OAuthButtonGroup } from './OAuthButtonGroup'
 import { PasswordField } from './PasswordField'
 import { useToast } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 
 
 export const Signup = () => {
+    const navigate = useNavigate()
     const [show, setShow] = useState(false)
     const [name, setName] = useState()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [confirmPassword, setConfirmPassword] = useState()
-    const [pic, setPic] = useState()
+    // const [pic, setPic] = useState()
     const [loading, setLoading] = useState(false)
+    const [cnfpassInput, setcnfpassInput] = useState(false)
     const toast = useToast()
 
 
     const handleClick = () => setShow(!show)
 
-    const postDetails = async (pics) => {
-        setLoading(true)
-        if (pics === undefined) {
-            toast({
-                title: 'Error Occurred !!',
-                description: "Please select an image !",
-                status: 'warning',
-                duration: 9000,
-                isClosable: true,
-            })
-            return
-        }
-        if (pics.type === "image/jpeg" || pics.type === "image/png"){
-            const data = new FormData()
-            data.append("files",pics)
-            data.append("upload_preset","mernChatApp")
-            data.append("cloud_name","dnoycwhjx")
-            console.log(data)
-            console.log("fetched")
-            
-            try{
-                const res = await axios.post("https://api.cloudinary.com/v1_1/dnoycwhjx",{data})
-                if(!res.ok){
-                    console.log(`ERROR: ${res}`)
-                }
-                // const data1 = res.data
-                // console.log(data1)
+    // const postDetails = (pics) => {
+    //     setLoading(true)
+    //     if (pics === undefined) {
+    //         toast({
+    //             title: 'Error Occurred !!',
+    //             description: "Please select an image !",
+    //             status: 'warning',
+    //             duration: 9000,
+    //             isClosable: true,
+    //         })
+    //         return
+    //     }
+    //     if (pics.type === "image/jpeg" || pics.type === "image/png"){
+    //         const data = new FormData()
+    //         data.append("files",pics)
+    //         data.append("upload_preset","mernChatApp")
+    //         data.append("cloud_name","dnoycwhjx")
+    //         console.log(data)
+    //         console.log("fetched")
+    //         fetch("https://api.cloudinary.com/v1_1/dnoycwhjx/image/upload",{
+    //             method:'post',
+    //             body:data,
 
-            }
-            catch(e){
-                console.log(e)
-            }
-            // fetch("https://api.cloudinary.com/v1_1/dnoycwhjx",{
-            //     method:'post',
-            //     body:data,
+    //         }).then((res)=>res.json()).then((data)=>{
+    //             console.log(data)
+    //             setPic(data?.url?.toString());
+    //             setLoading(false)
+    //         })
+    //     }else{
+    //         toast({
+    //             title: 'Error Occurred !!',
+    //             description: "Please select an image !",
+    //             status: 'warning',
+    //             duration: 9000,
+    //             isClosable: true,
+    //         })
+    //         setLoading(false)
+    //         return;
+    //     }
+    // }
 
-            // }).then((res)=>res.json()).then((data)=>{
-            //     setPic(data.url.toString());
-            //     setLoading(false)
-            // })
-        }else{
+    const submitHandler = async () => {
+        setLoading(true);
+        if (!name || !email || !password || !confirmPassword) {
             toast({
-                title: 'Error Occurred !!',
-                description: "Please select an image !",
+                title: 'Warnig!!',
+                description: "Please fill all the fields !",
                 status: 'warning',
-                duration: 9000,
+                duration: 5000,
                 isClosable: true,
+                position: 'top-right',
             })
-            setLoading(false)
+            setLoading(false);
             return;
         }
-    }
+        if (password !== confirmPassword) {
+            toast({
+                title: 'Warnig!!',
+                description: "Passwordi is not matching with confirm password!",
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            })
+            setLoading(false);
+            setcnfpassInput(true)
+            return
+        }
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+            const { data } = await axios.post("/api/user", { name, email, password }, config)
+            toast({
+                title: 'Success',
+                description: "Registration SuccessFull !!",
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            })
+            localStorage.setItem("userInfo", JSON.stringify(data))
+            setLoading(false)
+            navigate('/login')
+        } catch (error) {
+            toast({
+                title: 'Oops!!',
+                description: "User already exists !!",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            })
+            setLoading(false)
+        }
 
-    const submitHandler = () => { }
+    }
 
     return (
         <Container
@@ -150,17 +198,18 @@ export const Signup = () => {
                         <Stack spacing="5" >
                             <FormControl d="flex">
                                 <FormLabel htmlFor="email">Name</FormLabel>
-                                <Input id="text" type="name" />
+                                <Input onChange={(e) => { setName(e.target.value) }} id="text" type="name" />
                             </FormControl>
                             <FormControl d="flex">
                                 <FormLabel htmlFor="email">Email</FormLabel>
-                                <Input id="email" type="email" />
+                                <Input onChange={(e) => { setEmail(e.target.value) }} id="email" type="email" />
                             </FormControl>
 
                             <FormControl d="flex">
                                 <FormLabel htmlFor="email">Password</FormLabel>
                                 <InputGroup size='md'>
                                     <Input
+                                        onChange={(e) => { setPassword(e.target.value) }}
                                         pr='4.5rem'
                                         type={show ? 'text' : 'password'}
                                         placeholder='Enter password'
@@ -177,6 +226,8 @@ export const Signup = () => {
                                 <FormLabel htmlFor="email">Confirm Password</FormLabel>
                                 <InputGroup size='md'>
                                     <Input
+                                        onChange={(e) => { setConfirmPassword(e.target.value) }}
+                                        borderColor={cnfpassInput ? 'red.200' : 'green.200'}
                                         pr='4.5rem'
                                         type={show ? 'text' : 'password'}
                                         placeholder='Enter password'
@@ -188,16 +239,16 @@ export const Signup = () => {
                                     </InputRightElement>
                                 </InputGroup>
                             </FormControl>
-
+                            {/* 
                             <FormControl d="flex">
                                 <FormLabel htmlFor="email">Upload a profile Picture</FormLabel>
                                 <Input padding={1} pr='4.5rem' type={'file'} accept="image/*"
                                     onChange={(e) => postDetails(e.target.files[0])} />
-                            </FormControl>
+                            </FormControl> */}
 
                         </Stack>
                         <Stack spacing="6">
-                            <Button  colorScheme='teal'>Sign Up</Button>
+                            <Button isLoading={loading} onClick={submitHandler} colorScheme='teal'>Sign Up</Button>
 
                         </Stack>
                     </Stack>
