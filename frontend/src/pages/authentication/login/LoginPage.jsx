@@ -88,7 +88,7 @@ export const LoginPage = () => {
                             </Button>
                         </HStack>
                         <Stack spacing="6">
-                            <Button colorScheme='teal'>Sign in</Button>
+                            <Button  colorScheme='teal'>Sign in</Button>
                             <Button colorScheme='blue'>Get Guest User Token</Button>
                             <HStack>
                                 <Divider /> 
@@ -102,7 +102,7 @@ export const LoginPage = () => {
                         </Stack>
                         <HStack spacing="1" justify="center">
                             <Text color="muted">Don't have an account?</Text>
-                            <Button variant="link" colorScheme="blue">
+                            <Button  variant="link" colorScheme="blue">
                                 <Link to="/signup">Sign Up</Link>
                             </Button>
                         </HStack>

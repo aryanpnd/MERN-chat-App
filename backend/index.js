@@ -4,6 +4,7 @@ const dotenv = require("dotenv")
 const connectDB = require("./config/db")
 const path = require('path'); 
 const userRoutes = require("./routes/userRoutes")
+const {errorHandler,notFound} = require("./middlewares/errorMiddleware")
 
 const app = express()
 app.use(express.json()) //to accept JSON data
@@ -16,6 +17,9 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/api/user',userRoutes)
+
+app.use(notFound)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000 ;
 app.listen(PORT,console.log(`app listening on port ${PORT}`))
