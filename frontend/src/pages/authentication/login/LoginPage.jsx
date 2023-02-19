@@ -20,12 +20,12 @@ import { Logo } from './Logo'
 import { OAuthButtonGroup } from './OAuthButtonGroup'
 import { PasswordField } from './PasswordField'
 import { useToast } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { useState } from 'react'
 
 export const LoginPage = () => {
-    const navigate = useNavigate()
+    const history = useHistory();
     const toast = useToast()
 
     const [email, setEmail] = useState()
@@ -35,7 +35,7 @@ export const LoginPage = () => {
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
 
-    const notEmplemented = ()=>{
+    const notEmplemented = () => {
         toast({
             title: 'Warnig!!',
             description: "This feature has not been implemented yet",
@@ -60,14 +60,14 @@ export const LoginPage = () => {
             setLoading(false);
             return;
         }
-        
+
         try {
             const config = {
                 headers: {
                     "Content-Type": "application/json",
                 }
             }
-            const { data } = await axios.post("/api/user/login", {email, password }, config)
+            const { data } = await axios.post("/api/user/login", { email, password }, config)
             toast({
                 title: 'Success',
                 description: "Login SuccessFull !!",
@@ -76,11 +76,9 @@ export const LoginPage = () => {
                 isClosable: true,
                 position: 'top-right',
             })
-            if (document.getElementById("checkBox").checked) {
-                localStorage.setItem("userInfo", JSON.stringify(data))
-            }
+            localStorage.setItem("userInfo", JSON.stringify(data))
             setLoading(false)
-            navigate('/')
+            history.push('/chats')
         } catch (error) {
             toast({
                 title: 'Oops!!',
@@ -125,7 +123,7 @@ export const LoginPage = () => {
                         >
                             Log in to your account
                         </Heading>
-                        
+
                     </Stack>
                 </Stack>
                 <Box
@@ -177,27 +175,27 @@ export const LoginPage = () => {
                             {/* <PasswordField /> */}
                         </Stack>
                         <HStack justify="space-between">
-                            <Checkbox id='checkBox' defaultChecked>Remember me</Checkbox>
+                            {/* <Checkbox id='checkBox' defaultChecked>Remember me</Checkbox> */}
                             <Button variant="link" colorScheme="blue" size="sm">
                                 Forgot password?
                             </Button>
                         </HStack>
                         <Stack spacing="6">
-                            <Button isLoading={loading}  onClick={submitHandler} colorScheme='teal'>Sign in</Button>
+                            <Button isLoading={loading} onClick={submitHandler} colorScheme='teal'>Sign in</Button>
                             <Button onClick={notEmplemented} colorScheme='blue'>Get Guest User Token</Button>
                             <HStack>
-                                <Divider /> 
+                                <Divider />
                                 <Text fontSize="sm" whiteSpace="nowrap" color="muted">
-                                    or continue with   
+                                    or continue with
                                 </Text>
                                 <Divider />
                             </HStack>
 
-                            <OAuthButtonGroup notEmplemented={notEmplemented}/>
+                            <OAuthButtonGroup notEmplemented={notEmplemented} />
                         </Stack>
                         <HStack spacing="1" justify="center">
                             <Text color="muted">Don't have an account?</Text>
-                            <Button  variant="link" colorScheme="blue">
+                            <Button variant="link" colorScheme="blue">
                                 <Link to="/signup">Sign Up</Link>
                             </Button>
                         </HStack>

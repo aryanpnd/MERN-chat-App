@@ -21,12 +21,12 @@ import { Logo } from './Logo'
 import { OAuthButtonGroup } from './OAuthButtonGroup'
 import { PasswordField } from './PasswordField'
 import { useToast } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 
 
 export const Signup = () => {
-    const navigate = useNavigate()
+    const history = useHistory();
     const [show, setShow] = useState(false)
     const [name, setName] = useState()
     const [email, setEmail] = useState()
@@ -125,7 +125,7 @@ export const Signup = () => {
             })
             localStorage.setItem("userInfo", JSON.stringify(data))
             setLoading(false)
-            navigate('/login')
+            history.push('/login')
         } catch (error) {
             toast({
                 title: 'Oops!!',

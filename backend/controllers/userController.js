@@ -58,8 +58,8 @@ const authUser = asyncHandler(async (req, res) => {
 const allUsers = asyncHandler(async (req, res) => {
     const keyword = req.query.search ? {
         $or: [
-            { name: { $regex: req.query.search, $options: "i" } },
-            { email: { $regex: req.query.search, $options: "i" } }
+            { name: { $regex: req.query.search, $options: "i" } }, // for searching the user by name
+            // { email: { $regex: req.query.search, $options: "i" } } // for searching the user by email
         ]
     } : {}
     const users = await User.find(keyword).find({ _id: { $ne: req.use._id } });

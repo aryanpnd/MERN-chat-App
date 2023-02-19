@@ -5,16 +5,31 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react'
+import ChatProvider from './Context/ChatProvider';
+import { BrowserRouter } from 'react-router-dom';
+import { extendTheme } from "@chakra-ui/react"
 
+const theme = extendTheme({
+  colors: {
+    brand: {
+      100: "#9578f1",
+      // ...
+      900: "#1a202c",
+    },
+  },
+})
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
 
-      <ChakraProvider>
+  <ChakraProvider theme={theme}>
+    <ChatProvider>
+      <BrowserRouter>
         <App />
-      </ChakraProvider>
-  </React.StrictMode>
+      </BrowserRouter>
+    </ChatProvider>
+  </ChakraProvider>
+
 
 );
 
