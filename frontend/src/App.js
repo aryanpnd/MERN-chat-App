@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import { LoginPage } from './pages/authentication/login/LoginPage';
 import { Signup } from './pages/authentication/signup/Signup';
-import ChatPage from './pages/ChatPage';
+import ChatPage from './pages/chats/ChatPage';
 import Homepage from './pages/Homepage';
 function App() {
   return (

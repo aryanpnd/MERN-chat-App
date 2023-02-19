@@ -1,6 +1,6 @@
 import { Avatar, AvatarBadge, Box, Button, Center, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
-import { ChatState } from '../../Context/ChatProvider'
+import { ChatState } from '../../../Context/ChatProvider'
 
 function ProfileModal() {
     const { user, setUser } = ChatState()

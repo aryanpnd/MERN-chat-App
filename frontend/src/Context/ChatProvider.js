@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -8,7 +9,7 @@ const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [searchUsersIndex, setsearchUsersIndex] = useState()
   const [selectedChats, setSelectedChats] = useState()
-  const [chats, setChats] = useState()
+  const [chats, setChats] = useState([])
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -33,7 +34,7 @@ const ChatProvider = ({ children }) => {
         selectedChats,
         setSelectedChats,
         chats,
-        setChats
+        setChats 
       }}
     >
       {children}

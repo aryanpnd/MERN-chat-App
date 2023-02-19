@@ -2,10 +2,10 @@ import { Avatar, Box, Button, Divider, Menu, MenuButton, MenuItem, MenuList, Too
 import { BellIcon, ChatIcon, CloseIcon, Search2Icon } from '@chakra-ui/icons'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Logo } from './Logo'
-import { ChatState } from '../../Context/ChatProvider'
-import ProfileModal from './ProfileModal'
-import SearchDrawer from './SearchDrawer'
+import { Logo } from '../Logo'
+import { ChatState } from '../../../../Context/ChatProvider'
+import ProfileModal from '../ProfileModal'
+import SearchDrawer from '../SearchDrawer'
 
 function SideDrawer() {
 
@@ -28,7 +28,7 @@ function SideDrawer() {
             <Box
                 display={{ base: 'flex', md: 'flex' }}
                 flexDirection={{ base: 'column', md: 'column' }}
-                background={{ base: "#1b1b1d", md: "#1b1b1d" }}
+                background={{ base: "#070c27", md: "#070c27" }}
                 padding={{ base: "0.8rem", md: "0.8em" }}
                 alignItems={"center"}
                 justifyContent={"space-between"}

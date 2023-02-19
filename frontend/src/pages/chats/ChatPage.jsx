@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios';
-import { ChatState } from '../Context/ChatProvider';
+import { ChatState } from '../../Context/ChatProvider';
 import { Box } from '@chakra-ui/react';
-import SideDrawer from './miscellaneous/SideDrawer';
-import ChatBox from './miscellaneous/ChatBox';
-import MyChats from './miscellaneous/MyChats';
+import SideDrawer from './miscellaneous/components/SideDrawer';
+import ChatBox from './miscellaneous/components/ChatBox';
+import MyChats from './miscellaneous/components/MyChats';
 
 export default function ChatPage() {
     const { user, setUser } = ChatState()
@@ -23,7 +23,7 @@ export default function ChatPage() {
     }, [history])
 
     return (
-        <div style={{ display:"flex", width: "100%",height: "100%", backgroundColor: "yellow" }}>
+        <div style={{ display:"flex", width: "100%",height: "100%", backgroundColor: "#070c27" }}>
             {user && <SideDrawer />}
 
             {

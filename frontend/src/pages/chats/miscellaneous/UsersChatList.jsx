@@ -1,12 +1,13 @@
-import { Avatar, Badge, Box, Center, Flex, Text } from '@chakra-ui/react'
+import { Avatar, Badge, Box, Button, Center, Flex, Text, useDisclosure } from '@chakra-ui/react'
+
 import React from 'react'
 
 function UsersChatList({ user, handleUserChat }) {
+   
     return (
         <>
 
-
-            <Box _hover={{bg:"#c000ff36"}} cursor={"pointer"} display={"flex"} background={"#242426"} padding={"2"} borderRadius={"8px"} marginBottom={"10px"}>
+            <Box onClick={handleUserChat} _hover={{ bg: "#c000ff36" }} cursor={"pointer"} display={"flex"} background={"#242426"} padding={"2"} borderRadius={"8px"} marginBottom={"10px"}>
                 <Center>
 
                     <Avatar
@@ -29,6 +30,10 @@ function UsersChatList({ user, handleUserChat }) {
 
                 </Box>
             </Box>
+
+
+
+            
         </>
     )
 }
